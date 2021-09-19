@@ -121,14 +121,15 @@ static void publisher(AWS_IoT_Client *client, char *base_topic, uint16_t base_to
     paramsQOS0.isRetained = 0;
 
     //temperature sensor
-    int temperature = Core2ForAWS_Port_B_ADC_ReadMilliVolts();
-    if(temperature > 400){
-        Core2ForAWS_Sk6812_SetSideColor(SK6812_SIDE_LEFT, 0x00ff00);
-        Core2ForAWS_Sk6812_SetSideColor(SK6812_SIDE_RIGHT, 0x00ff00);
-        Core2ForAWS_Sk6812_Show();
-    }else{
+    int sensor = Core2ForAWS_Port_B_ADC_ReadMilliVolts();
+    int temperature = sensor / 10;
+    if(temperature > 37){
         Core2ForAWS_Sk6812_SetSideColor(SK6812_SIDE_LEFT, 0xff0000);
         Core2ForAWS_Sk6812_SetSideColor(SK6812_SIDE_RIGHT, 0xff0000);
+        Core2ForAWS_Sk6812_Show();
+    }else{
+        Core2ForAWS_Sk6812_SetSideColor(SK6812_SIDE_LEFT, 0x00ff00);
+        Core2ForAWS_Sk6812_SetSideColor(SK6812_SIDE_RIGHT, 0x00ff00);
         Core2ForAWS_Sk6812_Show();
     }
     cJSON *payload = cJSON_CreateObject();
